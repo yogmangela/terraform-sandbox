@@ -1,0 +1,3 @@
+FOO = bar
+hello:
+	echo

@@ -8,3 +8,6 @@ dependencies = [
     "inspect_ai == 0.3.76",
     "inspect_k8s_sandbox @ git+https://github.com/UKGovernmentBEIS/inspect_k8s_sandbox.git@038794e9323a8e2db4bcebb7d54ba5f05fcd0b23"
 ]
+[tool.setuptools.packages.find]
+where = ["."]
+exclude = ["k8s", "terraform"]

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apollo-task
+  namespace: inspect-sandbox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apollo-task
+  template:
+    metadata:
+      labels:
+        app: apollo-task
+    spec:
+      containers:
+      - name: apollo-task
+        image: 123456789012.dkr.ecr.eu-west-2.amazonaws.com/inspect-sandbox:dev  # <--- replace with your ECR image
+        command: ["inspect", "eval", "sample_task.py"]
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "512Mi"
+          limits:
+            cpu: "500m"
+            memory: "1Gi"
