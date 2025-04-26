@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inspect-ai
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: inspect-ai
+  template:
+    metadata:
+      labels:
+        app: inspect-ai
+    spec:
+      containers:
+      - name: inspect-ai
+        image: 571600866141.dkr.ecr.eu-west-2.amazonaws.com/inspect-ai:latest
+        ports:
+        - containerPort: 5000

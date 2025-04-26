@@ -1,0 +1,2 @@
+inspect_ai==0.3.90
+inspect_k8s_sandbox@ git+https://github.com/UKGovernmentBEIS/inspect_k8s_sandbox.git

@@ -1,0 +1,14 @@
+[project]
+name = "apollo-k8s-task"
+version = "0.1.0"
+description = "Take-home task for Platform Engineer position at Apollo Research"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "inspect_ai == 0.3.90",
+    "inspect_k8s_sandbox @ git+https://github.com/UKGovernmentBEIS/inspect_k8s_sandbox.git"
+]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
