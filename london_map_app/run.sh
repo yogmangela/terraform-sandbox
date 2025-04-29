@@ -1,11 +1,12 @@
 #!/bin/bash
 
-echo "📦 Setting up the virtual environment..."
+echo "📦 Creating virtual environment..."
 python3 -m venv .venv
 source .venv/bin/activate
 
 echo "⬇️ Installing dependencies..."
+pip install --upgrade pip
 pip install -r requirements.txt
 
-echo "🚀 Running Streamlit app..."
-streamlit run london_map_app.py
+echo "🚀 Launching Streamlit app..."
+streamlit run app.py
