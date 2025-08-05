@@ -18,9 +18,6 @@ jobs:
 
       - name: Start LocalStack
         run: |
-          source venv/bin/activate
-          localstack start -d
-          sleep 10
           localstack status services
 
       - name: Setup Terraform
@@ -39,16 +36,13 @@ jobs:
 
       - name: Terraform Plan (via tflocal)
         run: |
-          source venv/bin/activate
           tflocal plan
 
       - name: Terraform Apply (via tflocal)
         if: github.event_name == 'push'
         run: |
-          source venv/bin/activate
           tflocal apply -auto-approve
 
       - name: Run tfsec
         run: |
-          source venv/bin/activate
           tfsec .
