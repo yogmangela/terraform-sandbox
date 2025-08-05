@@ -2,7 +2,7 @@ provider "aws" {
   region                      = var.region
   access_key                  = "test"
   secret_key                  = "test"
-  s3_force_path_style         = true
+  //s3_force_path_style         = true
   skip_credentials_validation = true
   skip_metadata_api_check     = true
   endpoints {
