@@ -13,18 +13,8 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Start LocalStack and wait for S3 readiness
-        run: |
-          localstack start -d
-          echo "Waiting for LocalStack S3 service to be healthy..."
-          until curl -s http://localhost:4566/health | grep '"s3": "running"'; do
-            echo "LocalStack S3 not ready yet. Sleeping 5 seconds..."
-            sleep 5
-          done
-          echo "LocalStack S3 is ready."
-
-      - name: Test LocalStack endpoint connectivity
-        run: curl -v http://localhost:4566
+      - name: localstack status services
+        run: localstack status services
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -43,7 +33,5 @@ jobs:
       - name: terraform format
         run: terraform fmt
 
-      - name: Terraform Plan with debug logs
-        run: terraform plan
-        env:
-          TF_LOG: DEBUG
+      - name: Terraform Plan
+        run:  terraform plan 
