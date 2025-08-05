@@ -1,0 +1,48 @@
+            - name: Setup LocalStack
+  # You may pin to the exact commit or the version.
+  # uses: localstack/setup-localstack@9392b05ddb345894c2e86305fc426566e738c1db
+  uses: localstack/setup-localstack@v0.2.4
+  with:
+    # Tag of the LocalStack Docker image to use
+    image-tag: # default is latest
+    # Whether to install the `awslocal` CLI into the environment
+    install-awslocal: # default is true
+    # Whether to use LocalStack Pro (requires a valid API key)
+    use-pro: # optional, default is false
+    # Configuration variables to use for LocalStack
+    configuration: # optional, default is 
+    # Name of the CI project to track in LocalStack Cloud
+    ci-project: # optional, default is 
+    # Github token used to create PR comments
+    github-token: # optional, default is 
+    # Command(s) used to create an Ephemeral Instance of the PR (can use $AWS_ENDPOINT_URL)
+    preview-cmd: # optional
+    # Whether to include the created Ephemeral Instance URL in the PR comment
+    include-preview: # optional
+    # Explicitly prevent LocalStack start up, only installs CLI(s).
+Recommended to manage state later on in the pipeline or start up an ephemeral instance
+
+    skip-startup: # default is false
+    # Skip wait for LocalStack
+    skip-wait: # optional, default is false
+    # Skip stopping LocalStack Ephemeral Instance
+    skip-ephemeral-stop: # optional, default is true
+    # Manage LocalStack state
+Valid values are `load`, `save`, `start`, `stop`, `` (empty, don't manage state)
+Values `start`/`stop` only usable with Ephemeral Instances.
+
+    state-action: # optional, default is 
+    # Either store the state of LocalStack locally, as a cloud pod or start up an ephemeral instance.
+Valid values are `cloud-pods`, `ephemeral` or `local`.
+Use this option in unison with `state-action` to control behaviour.
+
+    state-backend: # optional, default is cloud-pods
+    # Name of the state artifact (without extension)
+    state-name: # optional
+    # The pod to load on startup of LocalStack, the env var AUTO_LOAD_POD
+    auto-load-pod: # optional, default is 
+    # The extension(s) to automatically install on startup of LocalStack, the env var EXTENSION_AUTO_INSTALL
+    extension-auto-install: # optional, default is 
+    # The lifetime of the ephemeral instance, how long the instance should be available for
+    lifetime: # optional, default is 30
+          
