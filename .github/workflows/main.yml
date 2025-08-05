@@ -19,22 +19,45 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup Python for pre-commit
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install tflocal if not present
+        run: |
+          if ! command -v tflocal &> /dev/null
+          then
+            echo "tflocal not found. Installing..."
+            pip install localstack-ext
+            curl -s https://raw.githubusercontent.com/localstack/tflocal/master/tflocal > /usr/local/bin/tflocal
+            chmod +x /usr/local/bin/tflocal
+          else
+            echo "tflocal is already installed."
+          fi
+
+      - name: Install pre-commit
+        run: |
+          pip install pre-commit
+          pre-commit install
+
+      - name: Run pre-commit checks (fmt, validate, tflint, tfsec)
+        run: pre-commit run --all-files
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.12.2
-    
-      - name: terraform version
+
+      - name: Terraform Version
         run: terraform version
 
       - name: Terraform Init
         run: terraform init
 
-      - name: terraform format
-        run: terraform fmt
-
       - name: Terraform Plan
-        run:  terraform plan 
+        run: terraform plan
 
-      - name: Terraform apply
-        run: terraform apply -auto-approve
+    #  - name: Terraform Apply
+    #    if: github.event_name == 'push'
+    #    run: terraform apply -auto-approve

@@ -1,0 +1,11 @@
+repos:
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.81.1  # Use the latest stable version from https://github.com/antonbabenko/pre-commit-terraform/releases
+    hooks:
+      - id: terraform_fmt
+        args: ["--recursive"]
+      - id: terraform_validate
+      - id: terraform_tflint
+        args: ["--enable-rule=terraform_documented_outputs"]
+      - id: terraform_tfsec
+        args: ["--soft-fail=false"]
