@@ -16,34 +16,30 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Verify system Python
+      - name: Create virtual environment and install tools
         run: |
-          which python3
-          python3 --version
-          pip3 --version
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install localstack-client pre-commit tfsec
 
-      - name: Install Python tools (tflocal, pre-commit, tfsec)
+      - name: Activate venv and run pre-commit
         run: |
-          pip3 install localstack-client
-          pip3 install  pre-commit
-          pip3 install  tfsec
-
-      - name: Pre-commit checks.
-        run: |
+          source venv/bin/activate
           pre-commit install
           pre-commit run --all-files
 
       - name: Start LocalStack
         run: |
+          source venv/bin/activate
+          localstack start -d
+          sleep 10
           localstack status services
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.12.2
-
-      - name: Terraform Version
-        run: terraform version
 
       - name: Terraform Format Check
         run: terraform fmt -check
@@ -54,12 +50,18 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
-      - name: Terraform Plan using tflocal
-        run: tflocal plan
+      - name: Terraform Plan (via tflocal)
+        run: |
+          source venv/bin/activate
+          tflocal plan
 
-      - name: Terraform Apply using tflocal
+      - name: Terraform Apply (via tflocal)
         if: github.event_name == 'push'
-        run: tflocal apply -auto-approve
+        run: |
+          source venv/bin/activate
+          tflocal apply -auto-approve
 
-      - name: Run tfsec (Terraform Security Scan)
-        run: tfsec .
+      - name: Run tfsec
+        run: |
+          source venv/bin/activate
+          tfsec .
