@@ -16,16 +16,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Create virtual environment and install tools
-        run: |
-          pip install localstack-client pre-commit
-
-      - name: Activate venv and run pre-commit
-        run: |
-          source venv/bin/activate
-          pre-commit install
-          pre-commit run --all-files
-
       - name: Start LocalStack
         run: |
           source venv/bin/activate
