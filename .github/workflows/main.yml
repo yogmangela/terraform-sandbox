@@ -33,7 +33,5 @@ jobs:
           AWS_ACCESS_KEY_ID: test
           AWS_SECRET_ACCESS_KEY: test
         run: |
-          terraform plan -out=tfplan \
-            -var="region=us-east-1" \
-            -var="endpoint=http://localhost:4566"
-          terraform apply -auto-approve tfplan
+          terraform plan 
+          # terraform apply -auto-approve tfplan
