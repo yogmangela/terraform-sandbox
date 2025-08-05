@@ -35,8 +35,4 @@ jobs:
         run: terraform fmt
 
       - name: Terraform Plan
-        env:
-          AWS_ACCESS_KEY_ID: test
-          AWS_SECRET_ACCESS_KEY: test
-        run: |
-          terraform plan 
+        run:  terraform plan 
