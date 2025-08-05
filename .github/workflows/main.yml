@@ -24,7 +24,9 @@ jobs:
 
       - name: Install Python tools (tflocal, pre-commit, tfsec)
         run: |
-          pip3 install localstack-client pre-commit tfsec
+          pip3 install localstack-client
+          pip3 install  pre-commit
+          pip3 install  tfsec
 
       - name: Pre-commit checks
         run: |
