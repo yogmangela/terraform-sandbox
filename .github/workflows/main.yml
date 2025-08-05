@@ -24,7 +24,6 @@ jobs:
 
       - name: Install Python tools (tflocal, pre-commit, tfsec)
         run: |
-          pip3 install --upgrade pip
           pip3 install localstack-client pre-commit tfsec
 
       - name: Pre-commit checks
@@ -34,8 +33,6 @@ jobs:
 
       - name: Start LocalStack
         run: |
-          localstack start -d
-          sleep 10  # wait for LocalStack to fully start
           localstack status services
 
       - name: Setup Terraform
