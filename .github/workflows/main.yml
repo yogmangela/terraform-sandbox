@@ -13,36 +13,30 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: localstack status services
-        run: localstack status services
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Python for pre-commit
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install tflocal if not present
+      - name: Verify system Python
         run: |
-          if ! command -v tflocal &> /dev/null
-          then
-            echo "tflocal not found. Installing..."
-            pip install localstack-ext
-            curl -s https://raw.githubusercontent.com/localstack/tflocal/master/tflocal > /usr/local/bin/tflocal
-            chmod +x /usr/local/bin/tflocal
-          else
-            echo "tflocal is already installed."
-          fi
+          which python3
+          python3 --version
+          pip3 --version
 
-      - name: Install pre-commit
+      - name: Install Python tools (tflocal, pre-commit, tfsec)
         run: |
-          pip install pre-commit
+          pip3 install --upgrade pip
+          pip3 install localstack-client pre-commit tfsec
+
+      - name: Pre-commit checks
+        run: |
           pre-commit install
+          pre-commit run --all-files
 
-      - name: Run pre-commit checks (fmt, validate, tflint, tfsec)
-        run: pre-commit run --all-files
+      - name: Start LocalStack
+        run: |
+          localstack start -d
+          sleep 10  # wait for LocalStack to fully start
+          localstack status services
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -52,12 +46,21 @@ jobs:
       - name: Terraform Version
         run: terraform version
 
+      - name: Terraform Format Check
+        run: terraform fmt -check
+
       - name: Terraform Init
         run: terraform init
 
-      - name: Terraform Plan
-        run: terraform plan
+      - name: Terraform Validate
+        run: terraform validate
 
-    #  - name: Terraform Apply
-    #    if: github.event_name == 'push'
-    #    run: terraform apply -auto-approve
+      - name: Terraform Plan using tflocal
+        run: tflocal plan
+
+      - name: Terraform Apply using tflocal
+        if: github.event_name == 'push'
+        run: tflocal apply -auto-approve
+
+      - name: Run tfsec (Terraform Security Scan)
+        run: tfsec .
