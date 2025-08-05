@@ -1,4 +1,4 @@
-name: Terraform CI
+name: Terraform CI with LocalStack
 
 on:
   push:
@@ -10,7 +10,21 @@ on:
 
 jobs:
   terraform:
-    runs-on: Self-hosted
+    runs-on: self-hosted
+
+    services:
+      localstack:
+        image: localstack/localstack:latest
+        ports:
+          - 4566:4566  # Default port for all LocalStack services
+        env:
+          SERVICES: s3
+          DEBUG: 1
+        options: >-
+          --health-cmd "curl -f http://localhost:4566/health || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
 
     steps:
       - name: Checkout repository
@@ -29,3 +43,15 @@ jobs:
 
       - name: Terraform Validate
         run: terraform validate
+
+      - name: Terraform Apply to LocalStack
+        env:
+          AWS_ACCESS_KEY_ID: test
+          AWS_SECRET_ACCESS_KEY: test
+          AWS_DEFAULT_REGION: eu-west-1
+          AWS_ENDPOINT_URL: http://localhost:4566
+        run: |
+          terraform plan -out=tfplan \
+            -var="region=us-east-1" \
+            -var="endpoint=http://localhost:4566"
+          terraform apply -auto-approve tfplan
