@@ -24,14 +24,19 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.6.0
+    
+      - name: terraform version
+        run: terraform version
 
       - name: Terraform Init
         run: terraform init
 
-      - name: Terraform Plan and Apply
+      - name: terraform format
+        run: terraform fmt
+
+      - name: Terraform Plan
         env:
           AWS_ACCESS_KEY_ID: test
           AWS_SECRET_ACCESS_KEY: test
         run: |
           terraform plan 
-          # terraform apply -auto-approve tfplan
