@@ -1,4 +1,4 @@
-name: Terraform CI with LocalStack
+name: Terraform CI with LocalStack v0.1
 
 on:
   push:
